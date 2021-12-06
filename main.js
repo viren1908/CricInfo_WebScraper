@@ -8,8 +8,9 @@
  const url = "https://www.espncricinfo.com/series/ipl-2020-21-1210595";
  const request = require("request");
  const cheerio = require("cheerio");
+ const allMatchObject = require("./allMatch");
  const fs = require("fs");
-
+ const path = require("path");
  // html load karo main url se 
  // fir anker tag ka url dekho 
 
@@ -28,33 +29,12 @@
 
      let linkOfResults = "https://www.espncricinfo.com/" + href;
      // console.log(linkOfResults);
-     getResultPage(linkOfResults);
+    allMatchObject.getAllMatches(linkOfResults);
 
  }
 
- // going on to the results Page 1 - sending request
-
- function getResultPage(link) {
-
-     request(link, function (err, response, html) {
-         if (err) {
-             console.log("Error at Loading Results page", err);
-
-         } else {
-             openResults(html);
-         }
-     })
-
- }
-
- // Results page - Getting html 
-
- function openResults(html) {
-     let $ = cheerio.load(html);
-     let scorecardElem =  $("a[data-hover='Scorecard']");
-    for(let i=0;i<scorecardElem.length;i++){
-       let scorecardLink = $(scorecardElem[i]).attr("href"); 
-       let fullLink = "https://www.espncricinfo.com/" + scorecardLink;
-       console.log(fullLink);
-    }
+ function createDir(filepath){
+     if(fs.existsSync(filepath) == false){
+         fs.mkdirSync(filepath);
+     }
  }
